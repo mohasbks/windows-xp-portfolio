@@ -1,7 +1,7 @@
 # 💾 Windows XP Retro Portfolio
 
 <div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/en/2/2c/Bliss_%28Windows_XP%29.png" alt="Windows XP Portfolio Banner" width="100%" style="border-radius: 10px; margin-bottom: 20px;">
+  <img src="public/windows-xp-4089x2726-10769.jpg" alt="Windows XP Portfolio Banner" width="100%" style="border-radius: 10px; margin-bottom: 20px;">
 </div>
 
 Welcome to my nostalgic, interactive **Windows XP-themed Developer Portfolio**! 
