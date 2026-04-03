@@ -1,6 +1,8 @@
 # 💾 Windows XP Retro Portfolio
 
-![Windows XP Portfolio](https://upload.wikimedia.org/wikipedia/commons/e/e4/Windows_logo_-_2021.svg)
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/en/2/2c/Bliss_%28Windows_XP%29.png" alt="Windows XP Portfolio Banner" width="100%" style="border-radius: 10px; margin-bottom: 20px;">
+</div>
 
 Welcome to my nostalgic, interactive **Windows XP-themed Developer Portfolio**! 
 This project takes you on a trip down memory lane, presenting my skills, projects, and resume in a fully functional web-based operating system built with the power of modern web technologies.
@@ -40,12 +42,12 @@ To run this project on your local machine, follow these simple steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/xp-portfolio.git
+   git clone https://github.com/mohasbks/windows-xp-portfolio.git
    ```
 
 2. **Navigate into the directory:**
    ```bash
-   cd xp-portfolio
+   cd windows-xp-portfolio
    ```
 
 3. **Install dependencies:**
@@ -75,9 +77,8 @@ To deploy your own version:
 
 ## 🤝 Contact
 
-Created with 💙 by **Al-Moatasem Bellah** - Full-Stack Developer & AI Engineer.
-- **LinkedIn:** [Al-Moatasem Bellah](#)
-- **GitHub:** [@yourgithub](#)
+Created with 💙 by **Al-Moatasem Bellah (mohasbks)** - Full-Stack Developer & AI Engineer.
+- **GitHub:** [@mohasbks](https://github.com/mohasbks)
 
 *“How do things actually work?”* – That question started my journey. This portfolio continues it.
 
