@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --xp-blue: #0058e6;
+  --xp-taskbar: #245edb;
+  --xp-bg: #004e98; 
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Tahoma', 'Segoe UI', sans-serif;
+  overflow: hidden;
+  user-select: none;
+  background-color: #000;
+}
+
+.xp-window-gradient {
+  background: linear-gradient(to bottom, #0058e6 0%, #3a93ff 8%, #288eff 40%, #127dff 88%, #036bfe 100%);
+}
+
+.xp-button {
+  background: linear-gradient(to bottom, #f2f2f2, #e5e5e5);
+  border: 1px solid #fff;
+  border-right-color: #888;
+  border-bottom-color: #888;
+  box-shadow: inset 1px 1px 0px #fff, inset -1px -1px 0px #ccc;
+}
+.xp-button:active {
+  border-left-color: #888;
+  border-top-color: #888;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  box-shadow: inset 1px 1px 0px #ccc, inset -1px -1px 0px #fff;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-left: 1px solid #e0e0e0;
+}
+::-webkit-scrollbar-thumb {
+  background: #cdcdcd;
+  border: 1px solid #f0f0f0;
+  border-right-color: #909090;
+  border-bottom-color: #909090;
+}
+::-webkit-scrollbar-button {
+  background: #ece9d8;
+  display: block;
+  height: 16px;
+  border: 1px solid #fff;
+  border-right-color: #888;
+  border-bottom-color: #888;
 }

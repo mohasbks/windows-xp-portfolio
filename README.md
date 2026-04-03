@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 💾 Windows XP Retro Portfolio
 
-## Getting Started
+![Windows XP Portfolio](https://upload.wikimedia.org/wikipedia/commons/e/e4/Windows_logo_-_2021.svg)
 
-First, run the development server:
+Welcome to my nostalgic, interactive **Windows XP-themed Developer Portfolio**! 
+This project takes you on a trip down memory lane, presenting my skills, projects, and resume in a fully functional web-based operating system built with the power of modern web technologies.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+* **Authentic Windows XP Experience:** Snappy interface, classic start menu, draggable windows, and retro system sounds!
+* **Interactive Desktop:** 
+  * Drag & Drop mechanics (Throw files into the Recycle Bin).
+  * Right-click Context Menus (Create your own text documents).
+  * True-to-life Windows screensaver on idle.
+* **Fully Functional "Apps":** 
+  * **My Computer / My Documents:** Browse through my projects and fetch my resume.
+  * **Notepad:** Built-in text editor that saves your session locally.
+  * **Terminal/CMD:** Interactive retro command prompt.
+  * **Mini-Games:** Classic 3D Room Viewer, Minesweeper, and functional Calculator.
+* **Classic "Turn Off Computer" Modal:** Exact replica of the grey-scale log-off screen and blue shutdown screen.
+* **Responsive Design:** Intelligently scales to full-screen on mobile devices while maintaining the authentic floating-window look out on desktop.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
+- **Library:** [React](https://react.dev/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **State Management:** [Zustand](https://github.com/pmndrs/zustand)
+- **Animations:** [Framer Motion](https://www.framer.com/motion/)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Running Locally
 
-## Deploy on Vercel
+To run this project on your local machine, follow these simple steps:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/xp-portfolio.git
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Navigate into the directory:**
+   ```bash
+   cd xp-portfolio
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser:**
+   Navigate to `http://localhost:3000` to boot up the system!
+
+---
+
+## 🌍 Deployment
+
+This portfolio is optimized for Vercel. 
+To deploy your own version:
+1. Push this code to your GitHub.
+2. Sign in to [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Import your GitHub repository and hit **Deploy** - Vercel will handle the rest!
+
+---
+
+## 🤝 Contact
+
+Created with 💙 by **Al-Moatasem Bellah** - Full-Stack Developer & AI Engineer.
+- **LinkedIn:** [Al-Moatasem Bellah](#)
+- **GitHub:** [@yourgithub](#)
+
+*“How do things actually work?”* – That question started my journey. This portfolio continues it.
+
+---
+
+*Disclaimer: This is a fan-made portfolio project. All visual assets and specific audio cues inspired by Windows XP belong to Microsoft Corporation.*
