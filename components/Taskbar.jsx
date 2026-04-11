@@ -60,14 +60,19 @@ export default function Taskbar() {
       </div>
 
       <div 
-         className="h-full bg-[#0b91e9] flex items-center px-4 border-l border-[#136199] text-white text-xs font-tahoma shadow-[inset_1px_1px_1px_rgba(255,255,255,0.3)] pt-0.5 cursor-pointer hover:brightness-110"
+         className="h-full bg-[linear-gradient(to_bottom,#2089d7,#126cbd)] flex items-center px-3 border-l border-[#136199] text-white text-[11px] font-tahoma shadow-[inset_1px_1px_1px_rgba(255,255,255,0.3)] pt-0.5 cursor-pointer hover:brightness-110"
          onDoubleClick={() => useOSStore.getState().openWindow({ id: 'datetime', title: 'Date and Time Properties', componentName: 'DateTimeProperties' })}
          title={dateTitle}
       >
-        <div className="flex items-center gap-2">
-           <div className="w-3 h-3 rounded-sm bg-blue-300 shadow-sm border border-blue-400"></div>
-           {time}
+        <div className="flex items-center gap-2 mr-3 drop-shadow-sm">
+           {/* Security Shield */}
+           <img src="https://win98icons.alexmeub.com/icons/png/security_padlock-0.png" className="w-3.5 h-3.5" title="Windows Security Alerts" />
+           {/* Network */}
+           <img src="https://win98icons.alexmeub.com/icons/png/network_internet_pcs_installer-0.png" className="w-4 h-4 opacity-90" title="Local Area Connection&#10;Speed: 100.0 Mbps&#10;Status: Connected" />
+           {/* Volume */}
+           <img src="https://win98icons.alexmeub.com/icons/png/loudspeaker_rays-0.png" className="w-4 h-4" title="Volume" />
         </div>
+        <span className="px-1 drop-shadow-sm">{time}</span>
       </div>
     </div>
   );

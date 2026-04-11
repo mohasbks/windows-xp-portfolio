@@ -6,24 +6,37 @@ import { motion } from "framer-motion";
 
 export default function Icon({ id, title, img, componentName, left, top, metadata, onDropToTrash }) {
   const openWindow = useOSStore(state => state.openWindow);
-  const [selected, setSelected] = useState(false);
+  const selectedIconId = useOSStore(state => state.selectedIconId);
+  const setSelectedIconId = useOSStore(state => state.setSelectedIconId);
+  
+  const selected = selectedIconId === id;
   
   const handleDragEnd = (event, info) => {
     if (id === 'recycle-bin') return;
-    // Check collision with Recycle Bin at roughly x:20, y:500 (allow margin)
-    if (info.point.x >= 10 && info.point.x <= 110 && info.point.y >= 480 && info.point.y <= 600) {
+    // Check collision with Recycle Bin at left: 20, top: 340
+    if (info.point.x >= 0 && info.point.x <= 120 && info.point.y >= 320 && info.point.y <= 450) {
       if(onDropToTrash) onDropToTrash(id);
     }
+  };
+
+  const handleDoubleClick = (e) => {
+    e.stopPropagation();
+    if (id === 'recycle-bin') {
+      openWindow({ id: 'recycle-bin', title: 'Recycle Bin', componentName: 'RecycleBin', metadata: {} });
+    } else {
+      openWindow({ id, title, componentName, metadata });
+    }
+    setSelectedIconId(null);
   };
 
   return (
     <motion.div
       drag
       dragMomentum={false}
-      onDragStart={() => setSelected(true)}
+      onDragStart={() => setSelectedIconId(id)}
       onDragEnd={handleDragEnd}
-      onClick={(e) => { e.stopPropagation(); playSound('click'); setSelected(true); }}
-      onDoubleClick={(e) => { e.stopPropagation(); openWindow({ id, title, componentName, metadata }); setSelected(false); }}
+      onClick={(e) => { e.stopPropagation(); playSound('nav'); setSelectedIconId(id); }}
+      onDoubleClick={handleDoubleClick}
       className={`absolute flex flex-col items-center justify-center w-20 gap-1 cursor-pointer group p-1 ${selected ? 'brightness-75' : ''}`}
       style={{ left: left, top: top }}
     >

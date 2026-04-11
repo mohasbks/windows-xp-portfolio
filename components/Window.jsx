@@ -8,7 +8,14 @@ import Messenger from "./Messenger";
 import MediaPlayer from "./MediaPlayer";
 import AboutMe from "./AboutMe";
 import Calculator from "./Calculator";
-import Solitaire from "./Solitaire";
+import Snake from "./Snake";
+import RecycleBin from "./RecycleBin";
+import TicTacToeAI from "./TicTacToeAI";
+import CommandPrompt from "./CommandPrompt";
+import DisplayProperties from "./DisplayProperties";
+import MyComputer from "./MyComputer";
+import MyDocuments from "./MyDocuments";
+import InternetExplorer from "./InternetExplorer";
 import { projects } from "@/data/projects";
 import { useState, useRef, useEffect } from "react";
 
@@ -85,57 +92,6 @@ const MSPaint = () => {
   );
 };
 
-const InternetExplorer = () => {
-  return (
-    <div className="flex flex-col h-full bg-white select-text">
-      <div className="bg-[#ece9d8] border-b border-gray-400 p-1 flex flex-col gap-1 shrink-0">
-        <div className="flex items-center gap-1 border-b border-gray-300 pb-1">
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">File</span>
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">Edit</span>
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">View</span>
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">Favorites</span>
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">Tools</span>
-          <span className="text-xs text-gray-600 px-2 cursor-pointer hover:bg-blue-600 hover:text-white">Help</span>
-        </div>
-        <div className="flex items-center gap-2 px-2 py-1">
-           <div className="flex gap-1">
-             <button className="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center text-gray-400" disabled><strong className="text-xl leading-none font-bold">←</strong></button>
-             <button className="w-8 h-8 rounded-full hover:bg-black/5 flex items-center justify-center text-gray-400" disabled><strong className="text-xl leading-none font-bold">→</strong></button>
-           </div>
-           <div className="flex-1 flex items-center gap-2">
-             <span className="text-xs text-gray-600">Address</span>
-             <input type="text" readOnly value="http://www.google.com/search?q=Al-Moatasem+Github+Projects" className="flex-1 text-xs px-2 py-1 border border-gray-400 bg-white shadow-[inset_1px_1px_3px_rgba(0,0,0,0.1)] outline-none text-blue-800 font-tahoma" />
-           </div>
-        </div>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto p-6 flex flex-col cursor-auto">
-        <div className="flex items-center gap-4 mb-8">
-           <h1 className="text-4xl font-serif text-blue-600"><span className="text-blue-600">G</span><span className="text-red-600">o</span><span className="text-yellow-500">o</span><span className="text-blue-600">g</span><span className="text-green-600">l</span><span className="text-red-600">e</span></h1>
-           <div className="flex-1 max-w-xl flex gap-2">
-             <input type="text" readOnly value="Al-Moatasem Github Projects" className="flex-1 text-sm px-2 py-1 border border-gray-400 shadow-inner outline-none font-tahoma" />
-             <button className="px-4 py-1 bg-[#ece9d8] border border-gray-400 shadow-sm text-sm font-tahoma hover:bg-[#e0dfd6]">Search</button>
-           </div>
-        </div>
-        
-        <div className="mb-4 text-xs font-tahoma text-gray-600 border-b border-gray-200 pb-2 bg-blue-50/50 px-2 py-2">
-          Web Results 1 - 8 of about 8 for <strong>Al-Moatasem Github Projects</strong>. (0.13 seconds)
-        </div>
-        
-        <div className="flex flex-col gap-6 font-tahoma px-2 pb-10">
-           {projects.map(p => (
-             <div key={p.id} className="flex flex-col">
-               <a href={p.url} target="_blank" rel="noreferrer" className="text-[#1a0dab] text-lg font-medium underline hover:bg-blue-50 w-fit">{p.title}</a>
-               <p className="text-sm text-black mt-1">{p.description}</p>
-               <span className="text-xs text-[#006621] mt-1">{p.url} - <span className="text-blue-600 underline cursor-pointer">Cached</span> - <span className="text-blue-600 underline cursor-pointer">Similar</span></span>
-             </div>
-           ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const Notepad = ({ metadata }) => {
   const [content, setContent] = useState(metadata?.content ?? `AL-MOATASEM BELLAH\n==================\n\nAI Student | Full-Stack Developer | Innovator\n\nI am an ambitious AI student at the Egyptian Russian University, deeply passionate about merging Artificial Intelligence, Web Development, and Automation. As the founder of the "Rowad" freelance platform, I focus on crafting scalable, intelligent solutions for the modern web.\n\nCore Skills:\n- Web Engineering: Next.js, React, Tailwind, Vue.js, Node.js\n- Artificial Intelligence: NLP, Computer Vision, GANs, PyTorch\n- Automation: Web Scraping, WhatsApp Bots, Algorithmic Trading Systems\n\n/* \nP.S. This is an authentic Windows XP notepad clone! \nYou can actually type and edit this text freely.\n*/`);
 
@@ -173,24 +129,7 @@ const Notepad = ({ metadata }) => {
   );
 };
 
-const MyDocuments = () => (
-  <div className="flex h-full bg-white select-text font-tahoma">
-    <div className="w-52 bg-gradient-to-b from-[#7498d9] to-[#5984d4] border-r border-[#3a6bc4] p-3 flex flex-col gap-4 overflow-y-auto shrink-0">
-      <div className="bg-white/10 rounded border border-white/20 p-2 shadow-sm">
-        <h3 className="font-bold text-[#0c327d] text-xs mb-2">File and Folder Tasks</h3>
-        <div className="flex items-center gap-2 text-[11px] text-[#0c327d] hover:underline cursor-pointer mb-2"><span className="text-blue-900 bg-white/50 px-1 rounded">📄</span> Rename this file</div>
-        <div className="flex items-center gap-2 text-[11px] text-[#0c327d] hover:underline cursor-pointer mb-2"><span className="text-blue-900 bg-white/50 px-1 rounded">✂️</span> Move this file</div>
-        <div className="flex items-center gap-2 text-[11px] text-[#0c327d] hover:underline cursor-pointer"><span className="text-blue-900 bg-white/50 px-1 rounded">🗑</span> Delete this file</div>
-      </div>
-    </div>
-    <div className="flex-1 p-6 bg-white overflow-y-auto flex items-start gap-4">
-       <a href="/resume.pdf" download="Al-Moatasem_Resume.pdf" className="flex flex-col items-center gap-2 p-2 hover:bg-blue-100 hover:border-blue-300 border border-transparent rounded cursor-pointer group active:bg-blue-200">
-         <img src="https://upload.wikimedia.org/wikipedia/commons/8/87/PDF_file_icon.svg" alt="PDF" className="w-16 h-16 drop-shadow-md" />
-         <span className="text-xs font-tahoma text-black text-center max-w-[120px] break-words group-hover:underline">Al-Moatasem_Resume.pdf</span>
-       </a>
-    </div>
-  </div>
-);
+
 
 const ControlPanel = () => (
   <div className="flex flex-col h-full bg-white select-text font-tahoma">
@@ -249,57 +188,7 @@ const ControlPanel = () => (
   </div>
 );
 
-const MyComputer = () => (
-  <div className="flex h-full bg-white select-text font-tahoma">
-    <div className="w-52 bg-gradient-to-b from-[#7498d9] to-[#5984d4] border-r border-[#3a6bc4] p-3 flex flex-col gap-4 overflow-y-auto shrink-0">
-      <div className="bg-white/10 rounded border border-white/20 p-2 shadow-sm">
-        <h3 className="font-bold text-[#0c327d] text-xs mb-2">System Tasks</h3>
-        <div className="flex items-center gap-2 text-[11px] text-[#0c327d] hover:underline cursor-pointer mb-2"><span className="text-blue-900 bg-white/50 px-1 rounded">🔍</span> View system info</div>
-        <div className="flex items-center gap-2 text-[11px] text-[#0c327d] hover:underline cursor-pointer"><span className="text-blue-900 bg-white/50 px-1 rounded">💻</span> Add/remove programs</div>
-      </div>
-    </div>
-    <div className="flex-1 p-6 bg-white overflow-y-auto flex flex-col gap-6">
-       <div>
-         <h2 className="font-bold text-gray-800 border-b border-blue-200 pb-1 mb-4 flex items-center gap-2 text-xs"><span className="text-[10px] bg-blue-100/50 text-blue-900 px-1 border border-blue-200 rounded-sm">^</span> Hard Disk Drives</h2>
-         <div className="flex gap-4">
-           <div className="flex items-center gap-3 w-64 p-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 cursor-pointer rounded">
-             {/* Fixed Disk Drive Icon */}
-             <div className="w-12 h-12 bg-gray-200 border-2 border-gray-400 rounded-sm shadow-md flex flex-col items-center justify-center p-1 relative">
-                <div className="w-full h-1/2 bg-gray-300 border-b border-gray-400 flex items-center justify-between px-1">
-                   <div className="w-1 h-1 bg-green-500 rounded-full"></div>
-                   <div className="w-3 h-1 bg-gray-400"></div>
-                </div>
-                <div className="text-[6px] font-bold text-gray-500 absolute bottom-1 right-1">HDD</div>
-             </div>
-             
-             <div className="flex-1">
-               <div className="text-xs text-black font-semibold">Local Disk (C:)</div>
-               <div className="w-full h-3 bg-[#ece9d8] rounded-sm mt-1 border border-gray-400 overflow-hidden outline outline-1 outline-white shadow-inner"><div className="h-full bg-blue-600 w-[85%]"></div></div>
-               <div className="text-[10px] text-gray-500 mt-1">2.14 GB free of 10.4 GB</div>
-             </div>
-           </div>
-         </div>
-       </div>
 
-       <div>
-         <h2 className="font-bold text-gray-800 border-b border-blue-200 pb-1 mb-4 flex items-center gap-2 text-xs"><span className="text-[10px] bg-blue-100/50 text-blue-900 px-1 border border-blue-200 rounded-sm">^</span> Devices with Removable Storage</h2>
-         <div className="flex gap-4">
-           <div className="flex items-center gap-3 w-64 p-2 hover:bg-blue-50 border border-transparent hover:border-blue-200 cursor-pointer rounded">
-             {/* Built CD Drive visually since external link failed */}
-             <div className="w-12 h-12 bg-gray-300 border border-gray-400 rounded shadow-sm flex items-center justify-center relative">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-200 to-gray-400 shadow-inner flex items-center justify-center border border-gray-300">
-                   <div className="w-2 h-2 rounded-full bg-white border border-gray-400 shadow-inner"></div>
-                </div>
-             </div>
-             <div className="flex-1">
-               <div className="text-xs text-black font-semibold">CD Drive (D:)</div>
-             </div>
-           </div>
-         </div>
-       </div>
-    </div>
-  </div>
-);
 
 const DateTimeProperties = () => {
   const [now, setNow] = useState(new Date());
@@ -362,7 +251,15 @@ const contentMap = {
   MediaPlayer,
   AboutMe,
   Calculator,
-  Solitaire
+  Snake,
+  RecycleBin,
+  TicTacToeAI,
+  CommandPrompt,
+  DisplayProperties,
+  MyComputer,
+  MyDocuments,
+  InternetExplorer,
+  ControlPanel
 };
 
 export default function Window({ window: w }) {

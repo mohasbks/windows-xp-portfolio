@@ -1,132 +1,166 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment, Html } from "@react-three/drei";
-import { useState } from "react";
 import Desktop from "./Desktop";
 import BootScreen from "./BootScreen";
 
-function NudgeUI({ params, setParams }) {
-  const [step, setStep] = useState(0.01);
-  
-  const handleCopy = () => {
-     const str = Object.keys(params).map(k => `${k}: ${parseFloat(params[k]).toFixed(4)}`).join(', ');
-     navigator.clipboard.writeText(`{ ${str} }`);
-     alert("تم النسخ بنجاح! الصقه في المحادثة الآن.");
-  };
-
+function NudgeUI({ offset, setOffset }) {
+  const step = 0.05; // 5 cm steps
+  const rStep = 0.05; // rotation steps
   return (
-    <div className="absolute top-4 right-4 bg-black/95 p-5 border-2 border-green-600 rounded-lg text-white z-[9999] shadow-[0_0_20px_rgba(0,255,0,0.2)] font-sans w-[300px]">
-      <h2 className="text-sm font-bold mb-4 text-green-400 border-b border-gray-700 pb-2">🎯 Precision Alignment Box</h2>
-      
-      <div className="text-xs mb-4">
-        <span className="text-gray-400 mr-2">دقة الحركة (Step):</span>
-        <div className="flex gap-1 mt-1">
-           <button onClick={()=>setStep(0.1)} className={`flex-1 py-1 rounded ${step===0.1?'bg-blue-600':'bg-gray-800'}`}>0.1</button>
-           <button onClick={()=>setStep(0.01)} className={`flex-1 py-1 rounded ${step===0.01?'bg-blue-600':'bg-gray-800'}`}>0.01</button>
-           <button onClick={()=>setStep(0.001)} className={`flex-1 py-1 rounded border border-blue-500 ${step===0.001?'bg-blue-600':'bg-gray-800'}`}>الملي (0.001)</button>
-        </div>
-      </div>
+    <div style={{ position:'absolute', top:20, right:20, background:'rgba(0,0,0,0.8)', padding:15, color:'white', zIndex:9999, borderRadius:10, border:'2px solid green' }}>
+      <h3 style={{ margin:'0 0 10px 0', fontSize:14 }}>🔧 تعديل المكان والكِبر والدوران</h3>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:5, marginBottom:10 }}>
+        <span>X (يمين/يسار)</span>
+        <button onClick={()=>setOffset(p=>({...p, x: p.x - step}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, x: p.x + step}))}>+</button>
 
-      <div className="grid grid-cols-1 gap-1.5 text-sm font-mono mb-4">
-        {[
-           {key: 'x', label: 'X (يمين/يسار)'}, 
-           {key: 'y', label: 'Y (أعلى/أسفل)'}, 
-           {key: 'z', label: 'Z (عمق)'}, 
-           {key: 'rx', label: 'RX (ميل للأمام/للخلف)'}, 
-           {key: 'ry', label: 'RY (دوران جانبي)'}, 
-           {key: 'rz', label: 'RZ (دوران عقارب الساعة)'}, 
-           {key: 'scale', label: 'الحجم (Scale)'}
-        ].map(item => (
-          <div key={item.key} className="flex items-center justify-between bg-[#1a1a1a] p-1.5 rounded">
-             <span className="w-24 text-gray-400 font-bold text-[10px] leading-tight" title={item.label}>{item.label}:</span>
-             <button onClick={()=>setParams(p=>({...p, [item.key]: p[item.key] - step}))} className="px-3 py-1 bg-red-600 hover:bg-red-500 rounded text-xl font-bold select-none active:scale-95 transition-transform">-</button>
-             <span className="w-16 text-center text-blue-300">{params[item.key].toFixed(4)}</span>
-             <button onClick={()=>setParams(p=>({...p, [item.key]: p[item.key] + step}))} className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-xl font-bold select-none active:scale-95 transition-transform">+</button>
-          </div>
-        ))}
-      </div>
+        <span>Y (أعلى/أسفل)</span>
+        <button onClick={()=>setOffset(p=>({...p, y: p.y - step}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, y: p.y + step}))}>+</button>
 
-      <div className="mt-4 flex gap-3 pb-4 border-b border-gray-700">
-         <div className="flex flex-col flex-1">
-            <span className="text-[11px] text-gray-400 mb-1">عرض الشاشة الداخلية Width</span>
-            <input type="number" value={params.w} onChange={(e)=>setParams(p=>({...p, w: parseInt(e.target.value)}))} className="text-white bg-gray-900 border border-gray-600 p-2 rounded text-xs outline-none focus:border-blue-500" />
-         </div>
-         <div className="flex flex-col flex-1">
-            <span className="text-[11px] text-gray-400 mb-1">طول الشاشة الداخلية Height</span>
-            <input type="number" value={params.h} onChange={(e)=>setParams(p=>({...p, h: parseInt(e.target.value)}))} className="text-white bg-gray-900 border border-gray-600 p-2 rounded text-xs outline-none focus:border-blue-500" />
-         </div>
-      </div>
+        <span>Z (عمق الأقتراب)</span>
+        <button onClick={()=>setOffset(p=>({...p, z: p.z - step}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, z: p.z + step}))}>+</button>
 
-      <button 
-         onClick={handleCopy} 
-         className="mt-4 w-full bg-blue-600 hover:bg-blue-500 transition-colors py-3 rounded text-sm font-bold shadow-lg flex items-center justify-center gap-2"
-      >
-         📋 Copy Configuration
-      </button>
-      <div className="text-[10px] text-gray-500 mt-2 text-center">بمجرد الانتهاء من التعديل والمحاذاة 100% اضغط للنسخ!</div>
+        <span>Scale (التكبير)</span>
+        <button onClick={()=>setOffset(p=>({...p, s: p.s - 5}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, s: p.s + 5}))}>+</button>
+
+        <span>RX (وقوف الشاشة)</span>
+        <button onClick={()=>setOffset(p=>({...p, rx: p.rx - rStep}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, rx: p.rx + rStep}))}>+</button>
+
+        <span>RY (دوران جانبي)</span>
+        <button onClick={()=>setOffset(p=>({...p, ry: p.ry - rStep}))}>-</button>
+        <button onClick={()=>setOffset(p=>({...p, ry: p.ry + rStep}))}>+</button>
+      </div>
+      <div style={{ fontSize:10, color:'#aaa' }}>
+        X: {offset.x.toFixed(2)} Y: {offset.y.toFixed(2)} Z: {offset.z.toFixed(2)}<br/>
+        RX: {offset.rx.toFixed(2)} RY: {offset.ry.toFixed(2)} Scale: {offset.s.toFixed(2)}
+      </div>
     </div>
-  )
+  );
 }
 
-function DeskModel({ params }) {
+function DeskModel({ offset }) {
   const { scene } = useGLTF('/Desk.glb');
+
+  // ====================================================
+  // تحويل إحداثيات بلندر (Z-up) إلى Three.js (Y-up)
+  // بلندر:   X = -0.11114 | Y = -0.47175 | Z = 0.9186
+  // Three.js: X = Bx      | Y = Bz       | Z = -By
+  // ====================================================
+  const screenPos = [
+    -0.11114 + offset.x,   // X ثابت
+     0.9186 + offset.y,    // Y = Z بلندر
+     0.47175 + offset.z    // Z = سالب Y بلندر → -(-0.47175) = 0.47175
+  ];
+
+  // ====================================================
+  // تحويل الـ Quaternion من بلندر إلى Three.js
+  // بلندر:    W:-0.5  X:0.5  Y:0.5  Z:-0.5
+  // Three.js: x=Bx   y=Bz   z=-By   w=Bw
+  // ====================================================
+  const screenQuat = [
+     0.5,   // x = Bx
+    -0.5,   // y = Bz
+    -0.5,   // z = -By
+    -0.5    // w = Bw
+  ]; // ترتيب Three.js: [x, y, z, w]
+
+  // ====================================================
+  // حجم الشاشة: 0.606m عرض × 0.454m ارتفاع
+  // السكيل الفعلي من بلندر 154.397
+  // ====================================================
+  const baseScale = 0.606 / 1024;
+  const displayScale = baseScale * offset.s;
 
   return (
     <group position={[0, -1, 0]}>
+      {/* المكتب الـ 3D */}
       <primitive object={scene} scale={1.5} />
-      
-      {/* 2D Windows Injected */}
-      <group position={[params.x, params.y, params.z]} rotation={[params.rx, params.ry, params.rz]} scale={[params.scale, params.scale, params.scale]}>
-         <Html transform occlude="blending" distanceFactor={1}>
-            <div 
-               className="os-container shadow-[0_0_50px_rgba(0,0,0,0.8)_inset] rounded-[8px] bg-black pointer-events-auto overflow-hidden bg-center bg-cover border-[6px] border-black"
-               style={{ 
-                  width: params.w, 
-                  height: params.h,
-                  backfaceVisibility: 'hidden' 
-               }} 
-            >
-               <BootScreen />
-               <Desktop />
-               {/* Subtle Glass overlay preventing accidental interaction during dev */}
-               <div className="absolute inset-0 z-[500] pointer-events-none bg-gradient-to-br from-white/5 via-transparent to-black/20 mix-blend-overlay"></div>
-            </div>
-         </Html>
+
+      {/* الشاشة الـ HTML */}
+      <group scale={1.5}>
+        <group position={screenPos} quaternion={screenQuat}>
+          <group position={[0, 0, 0.01]} rotation={[offset.rx, offset.ry, offset.rz]}>
+            <group scale={displayScale}>
+              <Html
+                transform
+                // مؤقتاً بدون occlude لتسهيل التجربة
+              >
+                <div
+                  style={{
+                    width: 1024,
+                    height: 768,
+                    overflow: 'hidden',
+                    borderRadius: '4px',
+                    background: '#000',
+                    backfaceVisibility: 'hidden',
+                    boxShadow: '0 0 40px rgba(100,180,255,0.15) inset',
+                  }}
+                >
+                  <BootScreen />
+                  <Desktop />
+
+                  {/* طبقة زجاج خفيفة */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      zIndex: 500,
+                      pointerEvents: 'none',
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)',
+                      mixBlendMode: 'overlay',
+                    }}
+                  />
+                </div>
+              </Html>
+            </group>
+          </group>
+        </group>
       </group>
     </group>
   );
 }
 
+import { useState } from "react";
+
 export default function Room3D() {
-  const [params, setParams] = useState({
-     // Starts roughly near your last screen setup
-     x: -0.1800, y: 1.7700, z: 0.7200, rx: -0.0820, ry: -1.5740, rz: -0.0850, scale: 0.2970, w: 1227, h: 760
-  });
+  // وضعنا الـ Scale الذي ذكرته في بلندر كبداية وافترضنا دوران بـ 90 درجة لتوقيف الشاشة
+  const [offset, setOffset] = useState({ x: 0, y: 0.2, z: 0, s: 154.397, rx: Math.PI / 2, ry: 0, rz: 0 }); 
 
   return (
-    <div className="w-full h-[100dvh] bg-[#0d0d0c] relative overflow-hidden">
-      {/* Absolute Precision Editor UI overlaid perfectly securely */}
-      <NudgeUI params={params} setParams={setParams} />
+    <div style={{ width: '100%', height: '100dvh', background: '#0d0d0c', position: 'relative', overflow: 'hidden' }}>
+      <NudgeUI offset={offset} setOffset={setOffset} />
+      <Canvas
+        camera={{ position: [0, 1.5, 4], fov: 50 }}
+        shadows
+        style={{ position: 'absolute', inset: 0 }}
+      >
+        <Environment preset="city" />
+        <ambientLight intensity={0.5} />
+        <spotLight
+          position={[5, 10, 5]}
+          intensity={1.5}
+          angle={0.3}
+          penumbra={1}
+          castShadow
+          shadow-bias={-0.0001}
+        />
 
-      <Canvas camera={{ position: [0, 2, 4], fov: 50 }} shadows className="absolute inset-0">
-         <Environment preset="city" />
-         <ambientLight intensity={0.5} />
-         <spotLight position={[5, 10, 5]} intensity={1.5} angle={0.3} penumbra={1} castShadow shadow-bias={-0.0001} />
-         
-         <OrbitControls 
-            makeDefault 
-            enableZoom={true} 
-            minDistance={0.5}
-            maxDistance={5} 
-            enablePan={true} 
-            maxPolarAngle={Math.PI / 2}
-         />
-         
-         <DeskModel params={params} />
+        <OrbitControls
+          makeDefault
+          enableZoom={true}
+          minDistance={0.5}
+          maxDistance={5}
+          enablePan={true}
+          maxPolarAngle={Math.PI / 2}
+        />
+
+        <DeskModel offset={offset} />
       </Canvas>
-      <div className="absolute bottom-5 left-0 w-full text-center text-white/30 text-[10px] pointer-events-none uppercase tracking-widest">
-         Studio Alignment Mode
-      </div>
     </div>
   );
 }

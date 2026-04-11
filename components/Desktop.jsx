@@ -3,6 +3,7 @@ import DesktopIcon from "./Icon";
 import Window from "./Window";
 import Taskbar from "./Taskbar";
 import StartMenu from "./StartMenu";
+import Clippy from "./Clippy";
 import useOSStore, { playSound } from "@/store/useOSStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -20,7 +21,10 @@ const defaultDesktopIcons = [
   { id: 'notepad', title: 'Notepad', img: 'https://win98icons.alexmeub.com/icons/png/notepad-1.png', componentName: 'Notepad', left: 100, top: 100 },
   { id: 'calculator', title: 'Calculator', img: 'https://win98icons.alexmeub.com/icons/png/calculator-0.png', componentName: 'Calculator', left: 100, top: 180 },
   { id: 'mediaplayer', title: 'Media Player', img: 'https://win98icons.alexmeub.com/icons/png/cd_audio_cd_a-3.png', componentName: 'MediaPlayer', left: 100, top: 260 },
-  { id: 'minesweeper', title: 'Minesweeper', img: 'https://win98icons.alexmeub.com/icons/png/minesweeper-0.png', componentName: 'Minesweeper', left: 100, top: 340 }
+  { id: 'minesweeper', title: 'Minesweeper', img: 'https://win98icons.alexmeub.com/icons/png/minesweeper-0.png', componentName: 'Minesweeper', left: 100, top: 340 },
+  { id: 'snake', title: 'Snake Game', img: 'https://win98icons.alexmeub.com/icons/png/keyboard-0.png', componentName: 'Snake', left: 180, top: 20 },
+  { id: 'tictactoe', title: 'Beat The AI 🤖', img: 'https://win98icons.alexmeub.com/icons/png/game_mine_1-0.png', componentName: 'TicTacToeAI', left: 180, top: 100 },
+  { id: 'cmd', title: 'Command Prompt', img: 'https://win98icons.alexmeub.com/icons/png/console_prompt-0.png', componentName: 'CommandPrompt', left: 180, top: 180 }
 ];
 
 export default function Desktop() {
@@ -31,9 +35,13 @@ export default function Desktop() {
   const isShutDown = useOSStore(state => state.isShutDown);
   const setShuttingDown = useOSStore(state => state.setShuttingDown);
   const setShutDown = useOSStore(state => state.setShutDown);
+  const setSelectedIconId = useOSStore(state => state.setSelectedIconId);
+  const trashItems = useOSStore(state => state.trashItems);
+  const moveToTrash = useOSStore(state => state.moveToTrash);
+  const wallpaper = useOSStore(state => state.wallpaper);
+  
   const [contextMenu, setContextMenu] = useState({ isOpen: false, x: 0, y: 0 });
   const [customFiles, setCustomFiles] = useState([]);
-  const [deletedIds, setDeletedIds] = useState([]);
   const [isIdle, setIsIdle] = useState(false);
 
   useEffect(() => {
@@ -63,14 +71,35 @@ export default function Desktop() {
   }, [isIdle]);
 
   const createNewFile = () => {
+    // Calculate next available grid position
+    let newLeft = 20;
+    let newTop = 20;
+    let found = false;
+    for (let c = 0; c < 10; c++) {
+      for (let r = 0; r < 10; r++) {
+        const gLeft = 20 + c * 80;
+        const gTop = 20 + r * 80;
+        const isTaken = [...defaultDesktopIcons, ...customFiles].some(
+          i => Math.abs(i.left - gLeft) < 10 && Math.abs(i.top - gTop) < 10
+        );
+        if (!isTaken) {
+          newLeft = gLeft;
+          newTop = gTop;
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+
     const newId = 'file_' + Date.now();
     const newFile = {
       id: newId,
       title: 'New Text Document.txt',
       img: 'https://win98icons.alexmeub.com/icons/png/notepad_file-0.png',
       componentName: 'Notepad',
-      left: Math.random() * 200 + 50,
-      top: Math.random() * 200 + 50,
+      left: newLeft,
+      top: newTop,
       metadata: { fileId: newId, content: '' }
     };
     const updated = [...customFiles, newFile];
@@ -87,21 +116,21 @@ export default function Desktop() {
   };
 
   const handleDropToTrash = (itemId) => {
-    playSound('error'); // Generic error/trash sound for fun
-    
-    // If it's a custom created file, delete it permanently from localStorage
+    // If it's a custom created file, don't delete permanently from localStorage, just move to trash
     if (itemId.startsWith('file_')) {
-      const updated = customFiles.filter(item => item.id !== itemId);
-      setCustomFiles(updated);
-      localStorage.setItem('xp_desktop_files', JSON.stringify(updated));
+      const itemToTrash = customFiles.find(i => i.id === itemId);
+      if (itemToTrash) moveToTrash(itemToTrash);
     } else {
-      // For default icons, just hide them for the session
-      setDeletedIds(prev => [...prev, itemId]);
+      // Move default application icons to the trash state array
+      const itemToTrash = [...defaultDesktopIcons].find(i => i.id === itemId);
+      if (itemToTrash) {
+        moveToTrash(itemToTrash);
+      }
     }
   };
 
-  const allIcons = [...defaultDesktopIcons, ...customFiles].filter(item => !deletedIds.includes(item.id));
-  const hasTrash = deletedIds.length > 0;
+  const allIcons = [...defaultDesktopIcons, ...customFiles].filter(item => !trashItems.find(t => t.id === item.id));
+  const hasTrash = trashItems.length > 0;
   
   const finalIcons = allIcons.map(item => {
      if(item.id === 'recycle-bin' && hasTrash) {
@@ -112,19 +141,27 @@ export default function Desktop() {
 
   return (
     <div 
-      className="relative w-full h-full overflow-hidden bg-[#004e98] bg-cover bg-center select-none" 
-      style={{ backgroundImage: "url('/windows-xp-4089x2726-10769.jpg')" }}
+      className="relative w-full h-full overflow-hidden bg-[#004e98] bg-cover bg-center select-none shadow-[inset_0_0_100px_rgba(0,0,0,0.5)] transition-all duration-500" 
+      style={{ backgroundImage: `url('${wallpaper}')` }}
+      onMouseDown={() => playSound('mouse')}
       onClick={() => { 
         if(startMenuOpen) closeStartMenu();
         if(contextMenu.isOpen) setContextMenu({ isOpen: false, x: 0, y: 0 });
+        setSelectedIconId(null);
       }}
       onContextMenu={handleContextMenu}
     >
       <div className="absolute top-0 left-0 w-full h-full p-2 z-0">
         {finalIcons.map(item => (
-          <DesktopIcon key={item.id} {...item} onDropToTrash={handleDropToTrash} />
+          <DesktopIcon 
+            key={item.id} 
+            {...item} 
+            onDropToTrash={item.id !== 'recycle-bin' ? handleDropToTrash : undefined}
+          />
         ))}
       </div>
+
+      <Clippy />
 
       <AnimatePresence>
         {windows.map(w => (
@@ -154,7 +191,12 @@ export default function Desktop() {
              </div>
           </div>
           <div className="h-[1px] bg-gray-300 my-1 mx-2"></div>
-          <div className="px-5 py-1 hover:bg-[#2f71cd] hover:text-white cursor-pointer text-gray-500">Properties</div>
+          <div 
+            className="px-5 py-1 hover:bg-[#2f71cd] hover:text-white cursor-pointer"
+            onClick={() => useOSStore.getState().openWindow({ id: 'display-properties', title: 'Display Properties', componentName: 'DisplayProperties', metadata: { width: 400, height: 480 } })}
+          >
+            Properties
+          </div>
         </div>
       )}
 
@@ -194,14 +236,14 @@ export default function Desktop() {
                      <span className="text-xs group-hover:underline">Stand By</span>
                   </div>
 
-                  <div className="flex flex-col items-center gap-2 cursor-pointer group" onClick={() => { playSound('error'); setShuttingDown(false); setShutDown(true); }}>
+          <div className="flex flex-col items-center gap-2 cursor-pointer group" onClick={() => { playSound('shutdown'); setShuttingDown(false); setShutDown(true); }}>
                      <div className="w-10 h-10 bg-red-500 rounded flex items-center justify-center border-[2px] border-white shadow-md group-hover:brightness-110">
                         <span className="text-white font-bold text-xl">⏻</span>
                      </div>
                      <span className="text-xs group-hover:underline">Turn Off</span>
                   </div>
 
-                  <div className="flex flex-col items-center gap-2 cursor-pointer group" onClick={() => { playSound('click'); window.location.reload(); }}>
+                  <div className="flex flex-col items-center gap-2 cursor-pointer group" onClick={() => { playSound('nav'); window.location.reload(); }}>
                      <div className="w-10 h-10 bg-green-500 rounded flex items-center justify-center border-[2px] border-white shadow-md group-hover:brightness-110">
                         <span className="text-white font-bold text-xl">↻</span>
                      </div>

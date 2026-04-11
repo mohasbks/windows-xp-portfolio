@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Play, Pause, Square, SkipBack, SkipForward, Volume2 } from "lucide-react";
 
 const TRACKS = [
-  { id: 1, title: "Beethoven - Moonlight Sonata", artist: "Classical", url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Daniel_Estrem/Beethoven_Sonatas/Daniel_Estrem_-_01_-_Beethoven_Sonata_No_14_in_C___minor_Moonlight_mvt_1.mp3" },
-  { id: 2, title: "Lofi Study Beat", artist: "Unknown", url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" }
+  { id: 1, title: "Lofi Coding Session (AI Focus)", artist: "Al-Moatasem Radio", url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Tours/Enthusiast/Tours_-_01_-_Enthusiast.mp3" },
+  { id: 2, title: "Synthwave OS Boot Sequence", artist: "Retro Vibes", url: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Ketsa/1000_Pieces/Ketsa_-_11_-_Hard_Sell.mp3" }
 ];
 
 export default function MediaPlayer() {

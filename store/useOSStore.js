@@ -1,27 +1,58 @@
 import { create } from 'zustand';
 
-let sounds = {};
-if (typeof window !== 'undefined') {
-  sounds = {
-    boot: new Audio('https://www.myinstants.com/media/sounds/windows-xp-startup.mp3'),
-    click: new Audio('https://www.myinstants.com/media/sounds/windows-navigation-start.mp3'),
-    type: new Audio('https://www.myinstants.com/media/sounds/typewriter-key-1.mp3'),
-    open: new Audio('https://www.myinstants.com/media/sounds/windows-navigation-start.mp3'),
-    close: new Audio('https://www.myinstants.com/media/sounds/windows-navigation-start.mp3'),
-    error: new Audio('https://www.myinstants.com/media/sounds/windows-xp-error.mp3')
-  };
-  if (sounds.boot) sounds.boot.volume = 0.5;
-}
+const soundUrls = {
+  boot: 'https://www.myinstants.com/media/sounds/windows-xp-startup.mp3',
+  mouse: 'https://www.myinstants.com/media/sounds/mouse-click.mp3',
+  nav: 'https://www.myinstants.com/media/sounds/windows-navigation-start.mp3',
+  type: 'https://www.myinstants.com/media/sounds/typewriter-key-1.mp3',
+  open: 'https://www.myinstants.com/media/sounds/windows-navigation-start.mp3',
+  close: 'https://www.myinstants.com/media/sounds/windows-navigation-start.mp3',
+  error: 'https://www.myinstants.com/media/sounds/windows-xp-error.mp3',
+  trash: 'https://raw.githubusercontent.com/reactos/reactos/master/media/sounds/recycle.wav',
+  shutdown: 'https://www.myinstants.com/media/sounds/windows-xp-shutdown.mp3'
+};
 
 export const playSound = (type) => {
-  if (typeof window === 'undefined' || !sounds[type]) return;
-  sounds[type].currentTime = 0;
-  sounds[type].play().catch(e => console.log('Audio blocked:', e));
+  if (typeof window === 'undefined' || !soundUrls[type]) return;
+  try {
+    const audio = new Audio(soundUrls[type]);
+    if (type === 'boot') audio.volume = 0.5;
+    if (type === 'mouse') audio.volume = 0.2;
+    audio.play().catch(e => console.log('Audio blocked:', type, e));
+  } catch (err) {
+    console.log('Audio error:', err);
+  }
 };
 
 const useOSStore = create((set, get) => ({
+  wallpaper: '/windows-xp-4089x2726-10769.jpg',
+  setWallpaper: (url) => set({ wallpaper: url }),
+  powerOn: false,
+  setPowerOn: (status) => set({ powerOn: status }),
+  biosComplete: false,
+  setBiosComplete: (status) => set({ biosComplete: status }),
   bootComplete: false,
   setBootComplete: (status) => set({ bootComplete: status }),
+  
+  selectedIconId: null,
+  setSelectedIconId: (id) => set({ selectedIconId: id }),
+
+  trashItems: [],
+  moveToTrash: (item) => {
+    playSound('trash');
+    set(state => {
+      // Check if item is already in trash
+      if (state.trashItems.find(i => i.id === item.id)) return state;
+      return { trashItems: [...state.trashItems, item], selectedIconId: null };
+    });
+  },
+  restoreFromTrash: (id) => set(state => ({
+    trashItems: state.trashItems.filter(item => item.id !== id)
+  })),
+  emptyTrash: () => {
+    playSound('trash');
+    set({ trashItems: [] });
+  },
   
   isShuttingDown: false,
   isShutDown: false,
@@ -30,7 +61,7 @@ const useOSStore = create((set, get) => ({
 
   startMenuOpen: false,
   toggleStartMenu: () => {
-    playSound('click');
+    playSound('nav');
     set(state => ({ startMenuOpen: !state.startMenuOpen }));
   },
   closeStartMenu: () => set({ startMenuOpen: false }),
@@ -89,7 +120,7 @@ const useOSStore = create((set, get) => ({
   })),
 
   toggleWindow: (id) => {
-    playSound('click');
+    playSound('nav');
     const { highestZIndex, windows } = get();
     const w = windows.find(w => w.id === id);
     if (!w) return;
